@@ -1,0 +1,151 @@
+<html>
+<head>
+<style type="text/css">
+	* {
+		font-family: Arial, sans;
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+	}
+
+	h1 {
+		margin: 1em 0;
+		text-align: center;
+	}
+
+	#container {
+	    margin: 0 auto;
+	}
+
+	#container input {
+		height: 2.5em;
+		visibility: hidden;
+	}
+
+	#container label {
+		background: #f9f9f9;  /* Fondo de las pestañas */
+		border-radius: .25em .25em 0 0;
+		color: #888;  /* Color del texto de las pestañas */
+		cursor: pointer;
+		display: block;
+		float: left;
+		font-size: 1em;  /* Tamaño del texto de las pestañas */
+		height: 2.5em;
+		line-height: 2.5em;
+		margin-right: .25em;
+		padding: 0 1.5em;
+		text-align: center;
+	}
+
+	#container input:hover + label {
+		background: #ddd;  /* Fondo de las pestañas al pasar el cursor por encima */
+		color: #666;  /* Color del texto de las pestañas al pasar el cursor por encima */
+	}
+
+	#container input:checked + label {
+		background: #f1f1f1;  /* Fondo de las pestañas al presionar */
+		color: #444; /* Color de las pestañas al presionar */
+		position: relative;
+		z-index: 6;
+		/*
+		-webkit-transition: .1s;
+		-moz-transition: .1s;
+		-o-transition: .1s;
+		-ms-transition: .1s;
+		*/
+	}
+
+	#content {
+		background: #f1f1f1;  /* Fondo del contenido */
+		border-radius: 0 .25em .25em .25em;
+		min-height: 20em;  /* Alto del contenido */
+		position: relative;
+		width: 100%;
+		height: 90%;
+		margin-top: 5px;
+		z-index: 5;
+	}
+
+	#content > div {
+		opacity: 0;
+		padding: 1.5em;
+		position: absolute;
+		z-index: -100;
+		/*
+		transition: all linear 0.1s;
+		*/
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+	}
+
+	
+
+	#container input#tab-1:checked ~ #content #content-1,
+	#container input#tab-2:checked ~ #content #content-2,
+	#container input#tab-3:checked ~ #content #content-3 {
+	    opacity: 1;
+	    z-index: 100;
+	}
+
+	input.visible {
+	  visibility: visible !important;
+	}
+    #request, #response, #assert{ 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+	Filter: <input id=filter placeholder="URL Filter" value="/v1/" />
+	Class name: <input id="class-name" placeholder="Class name" value="xxx" />
+	<button id="log-network-data-btn">Log network requests</button>
+	<ul id="request-list">
+	</ul>
+	<pre id="results"></pre>
+
+	<!--Contenedor-->
+	<div id="container">
+		<!--Pestaña 1 activa por defecto-->
+	    <input id="tab-1" type="radio" name="tab-group" checked="checked" />
+	    <label for="tab-1">Request object</label>
+	    <!--Pestaña 2 inactiva por defecto-->
+	    <input id="tab-2" type="radio" name="tab-group" />
+	    <label for="tab-2">Response object</label>
+	    <!--Pestaña 3 inactiva por defecto-->
+	    <input id="tab-3" type="radio" name="tab-group" />
+	    <label for="tab-3">Assert</label>
+	    <!--Contenido a mostrar/ocultar-->
+	    <div id="content">
+	    	<!--Contenido de la Pestaña 1-->
+	        <div id="content-1">
+	           <div id="request"></div>
+	        </div>
+	        <!--Contenido de la Pestaña 2-->
+	        <div id="content-2">
+	            <div id="response"></div>
+	        </div>
+	        <!--Contenido de la Pestaña 3-->
+	        <div id="content-3">
+	        	<div id="assert"></div>
+	        </div>
+	    </div>
+	</div>
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <!-- endbower -->
+    <!-- endbuild -->
+
+	<script src="scripts/parse.js"></script>
+	<script src="scripts/api-info.js"></script>
+
+</body>
+</html>
