@@ -6,10 +6,8 @@
 // });
 
 console.log("devtools.js: load");
-chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.html",  function(panel) {
+chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.html", function (panel) {
 	console.log("devtools.js chrome.devtools.panels.create");
-
-
 
 	// win.$( document ).ready(function() {
 	// 	console.log( "document.ready!" );
@@ -26,7 +24,7 @@ chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.ht
 	// 						return_str = return_str + result.entries[i].request.url + '\n';
 	// 					}
 	// 					//win.document.querySelector("#results").innerHTML = JSON.stringify(result.entries);
-						
+
 	// 				}
 	// 				win.document.querySelector("#results").innerHTML = return_str;
 
@@ -35,14 +33,11 @@ chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.ht
 	// 		});
 	// 	});
 
-
 	// });
-
 
 	// panel.onShown.addListener(function(win) {
 
 	// });
-
 
 	// function xxxx() {
 
@@ -56,8 +51,6 @@ chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.ht
 	// 	var log_network_data_btn = win.document.querySelector("#log-network-data-btn");
 	// 	var filter = win.document.querySelector("#filter");
 
-		
-
 	// 	log_network_data_btn.addEventListener("click", function(){
 	// 		var return_str = '';
 	// 		chrome.devtools.network.getHAR(function(result) {
@@ -70,7 +63,7 @@ chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.ht
 	// 						return_str = return_str + result.entries[i].request.url + '\n';
 	// 					}
 	// 					//win.document.querySelector("#results").innerHTML = JSON.stringify(result.entries);
-						
+
 	// 				}
 	// 				win.document.querySelector("#results").innerHTML = return_str;
 
@@ -89,4 +82,3 @@ chrome.devtools.panels.create("API recorder", "images/icon-38.png", "api-info.ht
 
 	// });
 });
-

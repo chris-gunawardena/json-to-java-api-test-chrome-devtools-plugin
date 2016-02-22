@@ -1,30 +1,21 @@
-$scope = {};
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+var data = {};
 
 function onErr(err, code) {
     if (!err) {
-        $scope.error = 'Could not load or parse that.'
+        data.error = 'Could not load or parse that.';
     } else {
-        $scope.error = err;
+        data.error = err;
     }
 }
 
-$scope.go = function () {
-    if (/https?:\/\//.test($scope.toconvert)) {
-        $http.get($scope.toconvert).success(function (res) {
-            if (typeof res !== 'object') {
-                res = JSON.parse(res);
-            }
-            $scope.toconvert = finish(res);
-        }).error(onErr);
-    } else {
-        $scope.toconvert = finish($scope.toconvert);
-    }
-};
-
 function finish(raw) {
-    $scope.typename = $('#class-name').val();
+    data.typename = $('#class-name').val();
     var result;
-    if (typeof raw !== 'object') {
+    if ((typeof raw === 'undefined' ? 'undefined' : _typeof(raw)) !== 'object') {
         try {
             result = JSON.parse(raw);
         } catch (err) {
@@ -44,9 +35,9 @@ function finish(raw) {
     if (Array.isArray(result)) {
         result = deriveTypeFromArray(result);
     }
-    var res = toJava($scope.typename, result, -1);
-    $scope.changed = false;
-    $scope.error = null;
+    var res = toJava(data.typename, result, -1);
+    data.changed = false;
+    data.error = null;
     return res;
 }
 
@@ -139,7 +130,7 @@ function toJava(name, obj, depth, inter) {
             if (obj % 1 !== 0) {
                 result += optional ? 'Double' : 'double';
             } else {
-                result += optional ? 'Long': 'long';
+                result += optional ? 'Long' : 'long';
             }
         } else if (typeof obj === 'boolean') {
             result += optional ? 'Boolean' : 'boolean';
@@ -161,11 +152,11 @@ function toJava(name, obj, depth, inter) {
         var result;
         for (var i = 0; i < arr.length; i++) {
             var o = arr[i];
-            if (typeof o === 'object') {
+            if ((typeof o === 'undefined' ? 'undefined' : _typeof(o)) === 'object') {
                 return;
             }
             if (typeof o === 'string') {
-                if (result && (result !== 'string' && result !== 'String')) {
+                if (result && result !== 'string' && result !== 'String') {
                     return 'Object';
                 }
                 result = 'String';
@@ -207,32 +198,32 @@ function toJava(name, obj, depth, inter) {
         if (/^\d+$/.test(key)) {
             continue;
         }
-        if (typeof obj[key] === 'object') {
+        if (_typeof(obj[key]) === 'object') {
             var arr = Array.isArray(obj[key]);
             if (arr) {
                 var jtype = javaTypeOfArray(obj[key]);
                 if (jtype) {
-                    constructorArgs.push(($scope.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + jtype + '[] ' + varname(key));
+                    constructorArgs.push((data.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + jtype + '[] ' + varname(key));
                     prt('public final ' + jtype + '[]' + ' ' + varname(key) + ';', 2);
                     continue;
                 }
                 var inter = {};
                 var tp = deriveTypeFromArray(obj[key], inter);
                 objTypes.push([toTypeName(key, true), tp, inter]);
-                constructorArgs.push(($scope.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + toTypeName(key, true) + (arr ? '[]' : '') + ' ' + varname(key));
+                constructorArgs.push((data.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + toTypeName(key, true) + (arr ? '[]' : '') + ' ' + varname(key));
                 prt('public final ' + toTypeName(key, true) + ' ' + varname(key) + (arr ? '[]' : '') + ';', 2);
             } else {
                 objTypes.push([key, obj[key], {}]);
-                constructorArgs.push(($scope.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + toTypeName(key) + (arr ? '[]' : '') + ' ' + varname(key));
+                constructorArgs.push((data.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + toTypeName(key) + (arr ? '[]' : '') + ' ' + varname(key));
                 prt('public final ' + toTypeName(key) + ' ' + varname(key) + (arr ? '[]' : '') + ';', 2);
             }
         } else {
-            prt(declaration(obj[key], inter[key]) + varname(key) + ';', 2)
-            constructorArgs.push(($scope.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + typeName(obj[key], inter[key]) + ' ' + varname(key));
+            prt(declaration(obj[key], inter[key]) + varname(key) + ';', 2);
+            constructorArgs.push((data.jackson ? '@JsonProperty(' + (inter[key] ? 'value=' : '') + '"' + varname(key) + '"' + (inter[key] ? ', required=false' : '') + ') ' : '') + typeName(obj[key], inter[key]) + ' ' + varname(key));
         }
     }
     prt('');
-    if ($scope.jackson) {
+    if (data.jackson) {
         prt('@JsonCreator', 2);
     }
     prt('public ' + name + '(' + constructorArgs.join(', ') + '){', 2);
