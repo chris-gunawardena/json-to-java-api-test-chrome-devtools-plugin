@@ -39,6 +39,7 @@ $(document).ready(function () {
 			request_editor.setValue(finish(e.target.network_data.request.postData.text), -1);
 		}
 		response_editor.setValue(finish(e.target.network_data.response_body), -1);
+		assert_editor.setValue(create_assert(e.target.network_data.response_body), -1);
 	});
 	// request_editor.setValue(create_request(e.target.network_data));
 	// response_editor.setValue(create_response(e.target.network_data));
@@ -57,6 +58,21 @@ $(document).ready(function () {
 		});
 	}
 });
+
+
+
+function create_assert(network_data) {
+	var assert_java_code = 'betFailure = BetFailures.builder()\n';
+	for(prop in network_data) {
+		if(typeof network_data[prop] !== 'object') {
+			assert_java_code = assert_java_code + '.' + prop + '(' + network_data[prop] + ');' + '\n';
+		} else{
+			
+		}
+	}
+	return assert_java_code + '.build();\n';
+}
+
 
 // function create_request(network_data) {
 // 	var request = '';
