@@ -62,15 +62,42 @@ $(document).ready(function () {
 
 
 function create_assert(network_data) {
-	var assert_java_code = 'betFailure = BetFailures.builder()\n';
-	for(prop in network_data) {
-		if(typeof network_data[prop] !== 'object') {
-			assert_java_code = assert_java_code + '.' + prop + '(' + network_data[prop] + ');' + '\n';
-		} else{
-			
-		}
+	var assert_java_code = '\n';
+	for (var prop in network_data) {
+		assert_java_code += getBuilder(network_data[prop], prop, 1);
 	}
-	return assert_java_code + '.build();\n';
+	return assert_java_code + '\n';
+}
+
+function getBuilder(obj, class_name, indent) {
+  var assert_java_code = '';
+  if (Array.isArray(obj)) {
+    for (var i = 0; i < obj.length; i++) {
+      assert_java_code += getBuilder(obj[i], class_name, indent);
+    }
+  } else {
+    assert_java_code += '\n' + Array(indent).join('\t') + class_name + '.builder()\n';
+    for (var prop in obj) {
+      if (typeof obj[prop] == 'object') {
+        assert_java_code += Array(indent).join('\t') + '.' + prop + '(';
+        assert_java_code += getBuilder(obj[prop], prop, indent + 1);
+        assert_java_code += Array(indent).join('\t') + ')\n';
+      } else {
+        assert_java_code += Array(indent).join('\t') + '.' + prop + '(';
+        if (typeof obj[prop] == 'string') {
+          assert_java_code += '"';
+        }
+        assert_java_code += obj[prop];
+        if (typeof obj[prop] == 'string') {
+          assert_java_code += '"';
+        }
+        assert_java_code += ')\n';
+      }
+    }
+    assert_java_code += Array(indent).join('\t') + '.build()\n';
+  }
+
+  return assert_java_code;
 }
 
 
